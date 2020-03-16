@@ -1,4 +1,10 @@
-module Mado where
+module Mado
+  ( Slot
+  , Query (..)
+  , Output (..)
+  , ModalState (..)
+  , component
+  ) where
 
 import Prelude
 
@@ -12,34 +18,38 @@ import Halogen.HTML.Properties as HP
 import Halogen.HTML.Core as HC
 import Halogen.HTML.Events as HE
 
+-- | Slot
 type Slot q o = H.Slot ( Query q ) ( Output o )
 
 type ChildSlot q o =
   ( inner :: H.Slot q o Unit
   )
 
+-- | The modal's internal state.
 type State i =
   { modalState :: ModalState
   , input :: i
   }
 
+-- | Query
 data Query ( q :: Type -> Type ) a
   = ChangeModalState ModalState a
 
+-- | Output of the modal
 data Output o
   = Opened
   | Closed
 
+-- | Possible Action of the modal
 data Action o
   = HandleClose
 
+-- | Possible states of the modal
 data ModalState
   = Open
   | Close
 
-type WithInput i =
-  ( input :: i )
-
+-- | This component is a higher order component that will wrap other components
 component
   :: forall q i o m
   . H.Component HH.HTML q i o m
